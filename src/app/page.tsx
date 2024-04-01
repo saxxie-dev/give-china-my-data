@@ -1,15 +1,19 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { useDropzone } from "react-dropzone";
 
 export default function Home() {
+  const router = useRouter();
+
   const onDrop = (a: File[]) => {
     setIsUploading(true);
     const uploadSize = a.map(f => f.size).reduce((prev, curr) => prev + curr);
     setTimeout(() => {
       setIsUploading(false);
-    }, uploadSize / 10e3); // upload speed 10mbps
+      router.push("/done")
+    }, uploadSize / 5e3); // upload speed 5mbps
     console.log("Not actually gonna upload the file lol, but here it is.")
     console.log(uploadSize);
   }
@@ -19,7 +23,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-around bg-slate-800 text-slate-200 min-h-full ">
-      <section className="bg-gradient-to-b from-red-800 to-red-600 w-full flex flex-col items-center justify-around shadow-xl" style={{ minHeight: "min(100vh, 100vw)" }}>
+      <section className="bg-gradient-to-b from-red-800 to-red-600 w-full flex flex-col items-center justify-around shadow-xl min-h-fit h-[100vh]" >
         <div>
           <h1 className="text-6xl font-black  p-2 text-transparent bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-500 bg-clip-text">Give China My Data</h1>
           <div className="px-4 text-xl font-bold text-yellow-500">Send your personal data straight to the CPC!<br />
@@ -28,7 +32,7 @@ export default function Home() {
         </div>
         {!isUploading ? <div className="border-4 border-yellow-500 p-8 rounded-xl drop-shadow-lg hover:drop-shadow-xl
          cursor-pointer text-yellow-200 hover:bg-yellow-200 hover:bg-opacity-10 transition-colors
-         min-w-[28rem] text-center h-52"
+         text-center h-52 m-8 max-w-full"
           {...getRootProps()}>
           <input {...getInputProps()} />
           <div className="text-yellow-400 text-6xl pb-3 flex justify-center"><UploadIcon /></div>
@@ -38,7 +42,7 @@ export default function Home() {
         </div> :
           <div className="border-4 border-yellow-500 p-8 rounded-xl drop-shadow-lg hover:drop-shadow-xl
         cursor-pointer text-yellow-100 bg-yellow-200 bg-opacity-10 transition-colors
-        min-w-[28rem] text-center flex justify-center h-52"
+        text-center flex justify-center h-52 m-8 max-w-full"
           >
             <div role="status">
               <svg aria-hidden="true" className="w-32 h-32 text-red-300 animate-spin fill-yellow-400" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
